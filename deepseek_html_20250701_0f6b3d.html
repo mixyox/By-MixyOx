@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MixyOx - Premium Modded Apps</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rajdhani', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: #000;
+            color: #f0f0f0;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .video-background video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            filter: brightness(0.55) contrast(1.1); /* Increased brightness */
+            transition: opacity 1.5s ease-in-out;
+            opacity: 1;
+        }
+        
+        .video-background video.fade-out {
+            opacity: 0;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 60%, rgba(0, 0, 0, 0.85) 100%),
+                        linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, transparent 50%);
+            z-index: 2;
+        }
+        
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 4;
+        }
+        
+        /* Header Styles */
+        header {
+            text-align: center;
+            margin: 20px 0 40px;
+            padding: 20px;
+            animation: fadeIn 1s ease;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .logo {
+            font-size: 4.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5),
+                         0 0 20px rgba(0, 255, 255, 0.5),
+                         0 0 30px rgba(255, 255, 0, 0.3);
+            position: relative;
+            display: inline-block;
+            animation: neonGlow 2s infinite alternate;
+        }
+        
+        @keyframes neonGlow {
+            0% { text-shadow: 0 0 10px rgba(255, 0, 255, 0.5),
+                             0 0 20px rgba(0, 255, 255, 0.5),
+                             0 0 30px rgba(255, 255, 0, 0.3); }
+            100% { text-shadow: 0 0 15px rgba(255, 0, 255, 0.8),
+                               0 0 25px rgba(0, 255, 255, 0.8),
+                               0 0 35px rgba(255, 255, 0, 0.5); }
+        }
+        
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 4px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00);
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; }
+            50% { box-shadow: 0 0 15px #ff00ff, 0 0 30px #00ffff; }
+            100% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; }
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 300;
+            margin-top: 15px;
+            color: #00ffff;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.7);
+        }
+        
+        /* Apps Grid */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 5;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .app-card {
+            background: rgba(10, 10, 30, 0.85);
+            border-radius: 18px;
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.1),
+                        inset 0 0 10px rgba(0, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        
+        .app-card:hover {
+            transform: translateY(-10px);
+            background: rgba(20, 20, 50, 0.9);
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.3),
+                        inset 0 0 15px rgba(0, 255, 255, 0.1);
+            border-color: rgba(255, 0, 255, 0.5);
+        }
+        
+        .app-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .app-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #1a1a4e, #2d2d7a);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+        }
+        
+        .app-icon img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+        
+        .app-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #00ffff;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+        
+        .free-badge {
+            background: linear-gradient(45deg, #00c853, #64dd17);
+            color: white;
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-left: auto;
+            font-weight: 600;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(0, 200, 83, 0.5);
+        }
+        
+        .app-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+            z-index: 2;
+            color: #ccc;
+        }
+        
+        .download-btn {
+            background: linear-gradient(45deg, #ff00cc, #3333ff);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(51, 51, 255, 0.4);
+            z-index: 2;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 0, 204, 0.6);
+        }
+        
+        .download-btn:hover::before {
+            left: 100%;
+        }
+        
+        .download-btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .password-btn {
+            background: linear-gradient(45deg, #ff00cc, #ff6600);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(255, 0, 204, 0.4);
+            z-index: 2;
+            text-decoration: none;
+            margin-top: 20px;
+            width: 100%;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .password-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .password-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 102, 0, 0.6);
+        }
+        
+        .password-btn:hover::before {
+            left: 100%;
+        }
+        
+        /* Social Media */
+        .social-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .social-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+        }
+        
+        .social-btn:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 0 25px currentColor;
+        }
+        
+        .telegram { background: linear-gradient(135deg, #0088cc, #00aced); }
+        .youtube { background: linear-gradient(135deg, #ff0000, #e52d27); }
+        .instagram { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px 20px;
+            opacity: 0.8;
+            font-size: 1rem;
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+            width: 100%;
+            position: relative;
+            z-index: 5;
+            color: #00ffff;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+        
+        .warning {
+            background: rgba(255, 50, 50, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 40px;
+            border: 1px solid rgba(255, 50, 50, 0.4);
+            text-align: center;
+            max-width: 800px;
+            margin: 40px auto 0;
+            position: relative;
+            z-index: 5;
+            color: #ff9999;
+            text-shadow: 0 0 5px rgba(255, 50, 50, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Download Gate - Compact Version */
+        #download-gate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .gate-container {
+            background: linear-gradient(135deg, #0c0a2d, #1a1a4e);
+            border-radius: 12px;
+            padding: 15px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3),
+                        inset 0 0 15px rgba(0, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gate-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: gateGlow 3s linear infinite;
+        }
+        
+        @keyframes gateGlow {
+            0% { transform: rotate(45deg) translateX(-100%); }
+            100% { transform: rotate(45deg) translateX(100%); }
+        }
+        
+        .gate-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .close-gate {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            z-index: 3;
+            color: #ff5555;
+        }
+        
+        .close-gate:hover {
+            background: rgba(255, 100, 100, 0.3);
+            transform: rotate(90deg);
+            color: #ff0000;
+        }
+        
+        .gate-title {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            background: linear-gradient(45deg, #ff00cc, #00ffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 8px rgba(255, 0, 204, 0.5);
+        }
+        
+        .gate-subtitle {
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            color: #ccc;
+        }
+        
+        .gate-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .gate-step {
+            background: rgba(20, 20, 40, 0.8);
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        
+        .gate-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+        
+        .gate-step:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .step-icon {
+            font-size: 1.2rem;
+            margin-right: 10px;
+            width: 30px;
+            text-align: center;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-size: 0.95rem;
+            margin-bottom: 3px;
+            font-weight: 600;
+            color: #00ffff;
+        }
+        
+        .step-desc {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            color: #aaa;
+        }
+        
+        .step-button {
+            background: rgba(0, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 5px;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+        
+        .step-button:hover {
+            background: rgba(0, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+        }
+        
+        .step-button i {
+            margin-right: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .gate-confirm {
+            background: linear-gradient(45deg, #00c853, #64dd17);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 12px rgba(0, 200, 83, 0.4);
+            position: relative;
+            overflow: hidden;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .gate-confirm.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .gate-confirm:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 200, 83, 0.6);
+        }
+        
+        .gate-confirm i {
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .verification-checkbox {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .verification-checkbox.checked {
+            background: #00c853;
+            border-color: #00c853;
+            box-shadow: 0 0 8px rgba(0, 200, 83, 0.5);
+        }
+        
+        .verification-checkbox.checked::after {
+            content: '✓';
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .verification-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .step-verification {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+            z-index: 1000;
+            animation: fadeInOut 3s forwards;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating {
+            animation: floatLogo 4s ease-in-out infinite;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3.5rem;
+            }
+            .apps-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            .app-card {
+                padding: 20px 15px;
+            }
+            .gate-container {
+                padding: 15px 10px;
+                max-width: 350px;
+            }
+            .gate-step {
+                flex-direction: column;
+                text-align: center;
+            }
+            .step-icon {
+                margin-right: 0;
+                margin-bottom: 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 2.8rem;
+            }
+            .subtitle {
+                font-size: 1rem;
+                letter-spacing: 3px;
+            }
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+            .gate-title {
+                font-size: 1.3rem;
+            }
+            .gate-subtitle {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-background" id="videoContainer">
+        <!-- Videos will be dynamically added here -->
+    </div>
+    <div class="overlay"></div>
+    <div class="cyber-grid"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo floating">MixyOx</div>
+            <div class="subtitle">Premium Modded Applications</div>
+        </header>
+        
+        <div class="apps-grid">
+            <!-- PhonePe 1 -->
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3050/3050489.png" alt="PhonePe">
+                    </div>
+                    <div class="app-name">PhonePe 1</div>
+                    <span class="free-badge">FREE</span>
+                </div>
+                <p class="app-description">Enhanced payment features with unlimited transactions.</p>
+                <button class="download-btn" data-link="https://www.mediafire.com/file/jfndw66u3jps328/PhonePe_1.0.apk/file">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+            
+            <!-- PhonePe 2 -->
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3050/3050489.png" alt="PhonePe">
+                    </div>
+                    <div class="app-name">PhonePe 2</div>
+                    <span class="free-badge">FREE</span>
+                </div>
+                <p class="app-description">Unlock premium features for seamless transactions.</p>
+                <button class="download-btn" data-link="https://www.mediafire.com/file/b28vja555ujxv1w/PhonePe_1.0_%25284%2529.apk/file">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+            
+            <!-- PhonePe 3 -->
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3050/3050489.png" alt="PhonePe">
+                    </div>
+                    <div class="app-name">PhonePe 3</div>
+                    <span class="free-badge">FREE</span>
+                </div>
+                <p class="app-description">Modified version with additional security features.</p>
+                <button class="download-btn" data-link="https://www.mediafire.com/file/rwn67jqchpqycag/PhonePe_1.0_%25283%2529.apk/file">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+            
+            <!-- PhonePe 4 -->
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3050/3050489.png" alt="PhonePe">
+                    </div>
+                    <div class="app-name">PhonePe 4</div>
+                    <span class="free-badge">FREE</span>
+                </div>
+                <p class="app-description">Latest mod with all premium features unlocked.</p>
+                <button class="download-btn" data-link="https://www.mediafire.com/file/tf2camewwhwi4lc/PhonePe_1.0_%25281%2529.apk/file">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+            
+            <!-- Paytm -->
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/888/888853.png" alt="Paytm">
+                    </div>
+                    <div class="app-name">Paytm</div>
+                    <span class="free-badge">FREE</span>
+                </div>
+                <p class="app-description">Unlock premium features and unlimited wallet balance.</p>
+                <button class="download-btn" data-link="https://www.mediafire.com/file/0g3bnf0mwpgbw78/FamPay_1.1.apk/file">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+            
+            <!-- Fampay -->
+            <div class="app-card">
+                <div class="app-header">
+                    <div class="app-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/888/888873.png" alt="Fampay">
+                    </div>
+                    <div class="app-name">Fampay</div>
+                    <span class="free-badge">FREE</span>
+                </div>
+                <p class="app-description">Unlocked premium features for seamless transactions.</p>
+                <button class="download-btn" data-link="https://www.mediafire.com/file/0g3bnf0mwpgbw78/FamPay_1.1.apk/file">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+        </div>
+        
+        <!-- Get Password Button -->
+        <div class="section-header">
+            <a href="https://youtu.be/5tu93Q7IFgg" class="password-btn">
+                <i class="fas fa-key"></i> Get Password
+            </a>
+        </div>
+        
+        <div class="warning">
+            <p>⚠️ Important: Use modded apps responsibly. Download at your own risk. We do not take responsibility for any misuse.</p>
+        </div>
+        
+        <!-- Social Media Links -->
+        <div class="social-container">
+            <a href="https://t.me/mixy_ox" class="social-btn telegram">
+                <i class="fab fa-telegram"></i>
+            </a>
+            <a href="https://youtube.com/@mixyox-1?si=VIN8Zc8c0Y70wzkp" class="social-btn youtube">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://www.instagram.com/mixy_ox?igsh=MXNmbGo5anpjbWY4aQ==" class="social-btn instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+        
+        <footer>
+            <p>© 2025 MixyOx - All Rights Reserved</p>
+        </footer>
+    </div>
+    
+    <!-- Download Gate -->
+    <div id="download-gate">
+        <div class="gate-container">
+            <div class="close-gate">✕</div>
+            <div class="gate-content">
+                <h2 class="gate-title">Unlock Your Download</h2>
+                <p class="gate-subtitle">Complete these steps to access your download</p>
+                
+                <div class="gate-steps">
+                    <div class="gate-step">
+                        <div class="step-icon">
+                            <i class="fab fa-youtube" style="color: #ff0000;"></i>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-title">Subscribe on YouTube</div>
+                            <div class="step-desc">Subscribe to our YouTube channel for tutorials and updates</div>
+                            <div class="step-verification">
+                                <div class="verification-checkbox" id="youtube-check"></div>
+                                <span class="verification-label">Subscribe</span>
+                            </div>
+                            <button class="step-button" id="youtube-btn">
+                                <i class="fab fa-youtube"></i> Subscribe Now
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="gate-step">
+                        <div class="step-icon">
+                            <i class="fab fa-telegram" style="color: #0088cc;"></i>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-title">Join Telegram</div>
+                            <div class="step-desc">Join our Telegram group for support and latest mods</div>
+                            <div class="step-verification">
+                                <div class="verification-checkbox" id="telegram-check"></div>
+                                <span class="verification-label">Join</span>
+                            </div>
+                            <button class="step-button" id="telegram-btn">
+                                <i class="fab fa-telegram"></i> Join Telegram Group
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="gate-step">
+                        <div class="step-icon">
+                            <i class="fab fa-instagram" style="color: #e1306c;"></i>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-title">Follow on Instagram</div>
+                            <div class="step-desc">Follow us on Instagram for updates and announcements</div>
+                            <div class="step-verification">
+                                <div class="verification-checkbox" id="instagram-check"></div>
+                                <span class="verification-label">Follow</span>
+                            </div>
+                            <button class="step-button" id="instagram-btn">
+                                <i class="fab fa-instagram"></i> Follow on Instagram
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="gate-confirm" id="confirm-download">
+                    <i class="fas fa-download"></i> Confirm & Download
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Video background cycling functionality
+            const videoContainer = document.getElementById('videoContainer');
+            
+            const videoSources = [
+                "https://great-kandace-margsf-8c736053.koyeb.app/stream/340?hash=38dec6",
+                "https://great-kandace-margsf-8c736053.koyeb.app/stream/339?hash=49a79e",
+                "https://great-kandace-margsf-8c736053.koyeb.app/stream/338?hash=563523",
+                "https://great-kandace-margsf-8c736053.koyeb.app/stream/337?hash=6fad34",
+                "https://great-kandace-margsf-8c736053.koyeb.app/stream/336?hash=b9fd8b"
+            ];
+            
+            let currentVideoIndex = 0;
+            
+            // Create video elements
+            const videos = [];
+            for (const source of videoSources) {
+                const video = document.createElement('video');
+                video.autoplay = true;
+                video.muted = true;
+                video.loop = false;
+                video.src = source;
+                video.style.opacity = '0';
+                video.style.transition = 'opacity 1.5s ease-in-out';
+                videoContainer.appendChild(video);
+                videos.push(video);
+                
+                // When video ends, switch to next
+                video.addEventListener('ended', function() {
+                    // Fade out current video
+                    this.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        // Move to next video
+                        currentVideoIndex = (currentVideoIndex + 1) % videoSources.length;
+                        
+                        // Reset and play next video
+                        videos.forEach(vid => vid.style.opacity = '0');
+                        const nextVideo = videos[currentVideoIndex];
+                        nextVideo.currentTime = 0;
+                        nextVideo.play().catch(e => console.log('Video play error:', e));
+                        nextVideo.style.opacity = '1';
+                    }, 1500);
+                });
+            }
+            
+            // Start the first video
+            videos[0].style.opacity = '1';
+            videos[0].play().catch(e => console.log('Video play error:', e));
+            
+            // Original functionality
+            const gate = document.getElementById('download-gate');
+            const closeGate = document.querySelector('.close-gate');
+            const confirmBtn = document.getElementById('confirm-download');
+            const downloadBtns = document.querySelectorAll('.download-btn');
+            
+            const youtubeBtn = document.getElementById('youtube-btn');
+            const telegramBtn = document.getElementById('telegram-btn');
+            const instagramBtn = document.getElementById('instagram-btn');
+            
+            const youtubeCheck = document.getElementById('youtube-check');
+            const telegramCheck = document.getElementById('telegram-check');
+            const instagramCheck = document.getElementById('instagram-check');
+            
+            let downloadLink = '';
+            let verificationCompleted = false;
+            
+            // Open gate when download button is clicked
+            downloadBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    downloadLink = this.getAttribute('data-link');
+                    gate.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                    
+                    // Reset verification state
+                    verificationCompleted = false;
+                    youtubeCheck.classList.remove('checked');
+                    telegramCheck.classList.remove('checked');
+                    instagramCheck.classList.remove('checked');
+                    confirmBtn.classList.remove('active');
+                });
+            });
+            
+            // Close gate
+            closeGate.addEventListener('click', function() {
+                gate.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Close gate when clicking outside
+            gate.addEventListener('click', function(e) {
+                if(e.target === gate) {
+                    gate.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            // YouTube verification
+            youtubeBtn.addEventListener('click', function() {
+                window.open('https://youtube.com/@mixyox-1?si=VIN8Zc8c0Y70wzkp', '_blank');
+                youtubeCheck.classList.add('checked');
+                checkVerificationStatus();
+                showNotification('YouTube subscription verified!');
+            });
+            
+            // Telegram verification
+            telegramBtn.addEventListener('click', function() {
+                window.open('https://t.me/mixy_ox', '_blank');
+                telegramCheck.classList.add('checked');
+                checkVerificationStatus();
+                showNotification('Telegram group joined!');
+            });
+            
+            // Instagram verification
+            instagramBtn.addEventListener('click', function() {
+                window.open('https://www.instagram.com/mixy_ox?igsh=MXNmbGo5anpjbWY4aQ==', '_blank');
+                instagramCheck.classList.add('checked');
+                checkVerificationStatus();
+                showNotification('Instagram follow confirmed!');
+            });
+            
+            // Check if all verifications are completed
+            function checkVerificationStatus() {
+                if (youtubeCheck.classList.contains('checked') && 
+                    telegramCheck.classList.contains('checked') && 
+                    instagramCheck.classList.contains('checked')) {
+                    confirmBtn.classList.add('active');
+                    verificationCompleted = true;
+                }
+            }
+            
+            // Confirm download
+            confirmBtn.addEventListener('click', function() {
+                if (verificationCompleted) {
+                    gate.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    
+                    if(downloadLink) {
+                        // Open download link in new tab
+                        window.open(downloadLink, '_blank');
+                    }
+                } else {
+                    showNotification('Please complete all verification steps first!');
+                }
+            });
+            
+            // Notification function
+            function showNotification(message) {
+                // Remove existing notification if any
+                const existingNote = document.querySelector('.notification');
+                if (existingNote) existingNote.remove();
+                
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+            
+            // Add hover effect to cards
+            const cards = document.querySelectorAll('.app-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Add animation to social buttons
+            const socialButtons = document.querySelectorAll('.social-btn');
+            socialButtons.forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.1)';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
